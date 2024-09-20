@@ -1,0 +1,303 @@
+// Budgeting Projecto.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+
+#include <iostream>
+using namespace std;
+
+double MajorExspenses(double);
+int Validate(int, int, int);
+double validate(double, double,double);
+double Validate(double, double);
+//int THISORTHATsavings(int);
+int switchcase(int, int, int);
+int switchcase(int, int, int, int);
+
+int main()
+{
+    //finda way to validate if something is an integer or a decimal
+    double spending;
+    double Balance;
+    double savings;
+    int time;
+    double test;
+    int check;
+    double percent;
+    double set;
+    double major;
+    double month;
+    double mtotal;
+    double week;
+    double wtotal;
+    double income;
+    double startingBalance;
+    int hours;
+    //select instead of each switch case having a thing?
+    int select;
+    int l;
+    //this will have error due to not having the perfect amount of weeks unless done as a yearly budget
+   //Starting amount
+    cout << "Please input your current balance below\n";
+    cin >> Balance;
+   Balance= Validate(Balance, 0);
+    startingBalance = Balance;
+    //time frame
+    cout << "Please input the length of time you want budgeted (months)\n";
+    cin >> time;
+    time= Validate(time, 1, 12);
+    //income
+    cout << "Please chooe your type of income: 1 for Weekly, 2 for Bi-weekly and Semi-Monthly, 3 for Monthly, 4 for Hourly, and any other number for None\n";
+    cin >> select;
+    switch (select)
+    {
+    case 1:
+    {
+        cout << "Please input your income below:\n";
+        cin >> income;
+        income = Validate(income, 0);
+        income = income * 4 * time;
+        Balance = Balance + income;
+        cout << "Your current Balance is " << Balance << endl;
+    }
+    break;
+    case 2:
+    {
+        cout << "Please input your income below:\n";
+        cin >> income;
+        income = income * 2 * time;
+        Balance = Balance + income;
+        cout << "Your current Balance is " << Balance << endl;
+    }
+    break;
+    case 3:
+    {
+        cout << "Please input your income below:\n";
+        cin >> income;
+        income = income * time;
+        Balance = Balance + income;
+        cout << "Your current Balance is " << Balance << endl;
+    }
+    break;
+    case 4:
+    {
+      
+        cout << "How many hours do you work per week on average\n";
+        //add a validate so people DONT CHOOSE MORE THAN 24 HOURS
+        cin >>hours;
+        cout << "Please input your income below:\n";
+        cin >> income;
+        income = income * hours * 4 * time;
+        Balance = Balance + income;
+        
+    }
+    default:
+        income = 0;
+        break;
+    }
+    //major exspense removal
+    cout << "Please input any current major exspenses that are not recurring below(type 0 when done)\n";
+    cin >> major;
+   major= MajorExspenses(major);
+    Balance = Balance - major;
+    cout << "Your current Balance for is " << Balance << endl;
+    //monthly spending planned
+    cout << "Please input monthly expenses(type 0 when done)\n";
+    cin >> month;
+   month= MajorExspenses(month);
+    mtotal = month * time;
+    Balance = Balance - mtotal;
+    cout << "Your current Balance total is " << Balance << endl;
+    //weekly spending planned
+    cout << "Please input weekly expenses(type 0 when done)\n";
+    cin >> week;
+    week=MajorExspenses(week);
+    wtotal = week * 4 * time;
+    Balance = Balance - wtotal;
+    cout << "Your current Balance total is " << Balance << endl;
+
+    //need to move but savings info
+    cout << "would you like your savings to be a percent or set amount? Type 1 for percent of total remaining and 2 for set amount\n";
+    cin >> check;
+    check=switchcase(check, 1, 2);
+    //THISORTHATsavings(check); error that needs to be fixed
+   switch (check)
+    {
+    case 1:
+    {
+        cout << "what percent of final amount do you want to save, input a non-negative decimal\n";
+        cin >> percent;
+       percent= validate(percent, 0, .99);
+        savings = Balance * percent;
+        Balance = Balance - savings;
+        cout << "Your current Balance is " << Balance << endl;
+    }
+    break;
+    case 2:
+    {
+        cout << "what amount do you want to save\n";
+        cin >> set;
+       set= Validate(set, 0);
+        cout << "Do you want this to be a monthly deposit, weekly deposit or single time deposit(1 for monthly, 2 for weekly, 3 for single time)" << endl;
+        cin >> check;
+       check= switchcase(check, 1, 2, 3);
+        switch (check)
+        {
+        case 1:
+        {
+            savings = set * time;
+            Balance = Balance - savings;
+            cout << "Your current Balance is " << Balance << endl;
+        }
+        break;
+        case 2:
+        {
+            savings = set * 4 * time;
+            Balance = Balance - savings;
+            cout << "Your current Balance is " << Balance << endl;
+        }
+        break;
+        case 3:
+        {
+            savings = set;
+            Balance = Balance - savings;
+            cout << "Your current Balance is " << Balance << endl;
+        }
+        }
+    }
+    break;
+    }
+   cout << "Would you like to budget the rest of your Balance as spending money? please type 1 if yes and 2 if no\n";
+   cin >> select;
+   if (select == 1)
+   {
+       cout << "Please choose how you want your spending to be displayed 1 for monthly, 2 for weekly, 3- for daily\n";
+       cin >> l;
+       l = switchcase(l, 1, 2, 3);
+       switch (l)
+       {
+       case 1:
+       {
+           spending = Balance / time;
+           Balance = Balance - Balance;
+           cout << "Your monthly spending is " << spending << endl;
+       }
+       break;
+       case 2:
+       {
+           spending = (Balance / time) / 4;
+           Balance = Balance - Balance;
+           cout << "Your weekly spending is " << spending << endl;
+       }
+       break;
+       default:
+           spending = ((Balance / time) / 4) / 7;
+           Balance = Balance - Balance;
+           cout << "Your daily spending is " << spending << endl;
+       }
+   }
+   else
+   {
+       spending = 0;
+       cout << "Your current balance is " << Balance << endl;
+   }
+   cout << "this is your overall information for your budget:\n " << "Starting Balance: " << startingBalance << endl;
+   cout<<"Your budget time frame is "<<time<<" months\n" << "Your estimated income over " << time << " months: " << income << endl;
+   cout << "Major Expenses: " << major << endl << "Monthly Expenses: " << month << endl << "Weekly Expenses: " << week << endl;
+   cout << "The amount you put into savings is " << savings << endl;
+   cout << "You can spend up to " << spending << " (time frame based on what you selected in spending)\n";
+   cout << "Your final balance is " << Balance << endl;
+}
+
+//add to a website using html
+// make a switch case that alllows users to choose options as one time or monthly or weekly
+// write a prompt after current balance that calculates income and adds to balance for budget time period
+// if there balance is less than 0 dont allow them to have a savings or spending
+int Validate(int x, int a, int b)
+{
+    while (x > b || x < a)
+    {
+        cout << "pls reinput your value: ";
+        cin >> x;
+    }
+    return x;
+}
+
+double validate(double x, double a, double b)
+{
+    while (x >= b || x <= a)
+    {
+        cout << "pls reinput your value: ";
+        cin >> x;
+    }
+    return x;
+}
+
+    double Validate(double x, double a)
+    {
+        while (x < a)
+        {
+            cout << "pls reinput your value: ";
+            cin >> x;
+        }
+        return x;
+    }
+    
+    int switchcase(int x, int a, int b)
+    {
+        while (x != b && x != a)
+        {
+            cout << "pls reinput your value: ";
+            cin >> x;
+        }
+        return x;
+    }
+    int switchcase(int x, int a, int b, int c)
+    {
+        while (x != b && x != a && x != c)
+        {
+            cout << "pls reinput your value: ";
+            cin >> x;
+        }
+        return x;
+    }
+    
+    double MajorExspenses(double x)
+    {
+        double y=0;
+
+      x= Validate(x, 0);
+
+        while (x != 0)
+        {
+            y += x;
+            cin >> x;
+            x = Validate(x, 0);
+        }
+        cout << y << endl;
+        return y;
+    }
+    
+   /* int THISORTHATsavings(int x)
+    {
+        double percent;
+        double set;
+        switch (x)
+        {
+        case 1:
+        {
+            cout << "what percent of final amount do you want to save, input a non-negative decimal\n";
+            cin >> percent;
+            validate(percent, 0, .99);
+            return percent;
+        }
+        break;
+        case 2:
+        {
+            cout << "what amount do you want to save\n";
+            cin >> set;
+            Validate(set, 0);
+            return set;
+        }
+        break;
+        }
+    }
+    */
